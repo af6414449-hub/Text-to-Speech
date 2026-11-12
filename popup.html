@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            width: 280px;
+            padding: 14px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f7f7f8;
+            color: #1f1f23;
+        }
+
+        .section {
+            background: #ffffff;
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e2e6;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b6b73;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            color: #1f1f23;
+            font-weight: 600;
+        }
+
+        .toggle-label .status {
+            font-weight: 600;
+            font-size: 13px;
+            margin-left: 4px;
+        }
+        .toggle-label .status.active { color: #1f8a4c; }
+        .toggle-label .status.inactive { color: #c0324f; }
+
+        .switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider-toggle {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #c4c4cc; transition: 0.2s; border-radius: 22px;
+        }
+        .slider-toggle::before {
+            content: ''; position: absolute;
+            height: 16px; width: 16px;
+            left: 3px; bottom: 3px;
+            background: #ffffff; transition: 0.2s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .switch input:checked + .slider-toggle { background: var(--accent, #c2410c); }
+        .switch input:checked + .slider-toggle::before { transform: translateX(18px); }
+
+        .speed-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e2e6;
+            outline: none;
+            cursor: pointer;
+        }
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent, #c2410c);
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            cursor: pointer;
+        }
+        .speed-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent, #c2410c);
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            cursor: pointer;
+        }
+        .speed-slider::-moz-range-track {
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e2e6;
+        }
+
+        .speed-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 10px;
+            color: #a0a0a8;
+        }
+
+        .lang-options { display: flex; gap: 8px; }
+        .lang-btn {
+            flex: 1;
+            padding: 7px 0;
+            border: 1px solid #d4d4da;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #4a4a52;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        .lang-btn:hover { opacity: 0.85; }
+        .lang-btn[data-voice="Microsoft Mark - English (United States)"].active { background: #c2410c; border-color: #c2410c; color:#fff; }
+        .lang-btn[data-voice="Microsoft Pavel - Russian (Russia)"].active     { background: #1e3a8a; border-color: #1e3a8a; color:#fff; }
+        .lang-btn[data-voice="tr-TR-AhmetNeural"].active                       { background: #b03052; border-color: #b03052; color:#fff; }
+
+        .hint {
+            text-align: center;
+            font-size: 11px;
+            color: #8a8a92;
+            padding: 4px 0 2px;
+            letter-spacing: 0.3px;
+        }
+        .hint kbd {
+            background: #ffffff;
+            border: 1px solid #d4d4da;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 10px;
+            color: #3a3a42;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section">
+        <div class="toggle-row">
+            <div class="toggle-label">
+                Mode
+                <span class="status inactive" id="statusText">Off</span>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toggleSwitch">
+                <span class="slider-toggle"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-label">Speed</div>
+        <input type="range" class="speed-slider" id="speedSlider"
+               min="0.5" max="2.0" step="0.25" value="1.0">
+        <div class="speed-scale">
+            <span>0.5x</span>
+            <span>1x</span>
+            <span>1.5x</span>
+            <span>2x</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-label">Language</div>
+        <div class="lang-options">
+            <button class="lang-btn active" data-voice="Microsoft Mark - English (United States)">EN</button>
+            <button class="lang-btn" data-voice="Microsoft Pavel - Russian (Russia)">RU</button>
+            <button class="lang-btn" data-voice="tr-TR-AhmetNeural">TR</button>
+        </div>
+    </div>
+
+    <div class="hint">
+        <kbd>Ctrl</kbd> + <kbd>LMB</kbd> on text to speak
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
