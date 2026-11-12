@@ -1,6 +1,6 @@
-# Text to Speech — Chrome Extension
+# Text to Speech — Browser Extension
 
-A minimal Chrome extension that reads text aloud. Hold **Ctrl** to highlight text under the cursor, then **Ctrl + Click** to speak it. Click again to stop.
+A minimal browser extension that reads text aloud. Hold **Ctrl** to highlight text under the cursor, then **Ctrl + Click** to speak it. Click again to stop.
 
 No build step, no dependencies — plain Manifest V3.
 
